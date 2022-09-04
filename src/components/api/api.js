@@ -2,12 +2,12 @@ const BaseURL = process.env.REACT_APP_BASE_URL;
 const PublicKey = process.env.REACT_APP_KEY_PUBLIC;
 const Domain = process.env.REACT_APP_MY_DOMAIN;
 
-export const getURLShortener = async (payload) => {
+export const getURLShortener = async (action) => {
+  let data=null
   var inputData = {
     domain: Domain,
-    originalURL: payload,
+    originalURL: action.payload,
   };
-  console.log(inputData, PublicKey, BaseURL);
   try {
     const response = await fetch(BaseURL, {
       method: "POST",
@@ -18,10 +18,10 @@ export const getURLShortener = async (payload) => {
       },
       body: JSON.stringify(inputData),
     });
-    const data = await response.json();
-    console.log(data);
-    return data;
+    data = await response.json();
+    console.log(data , "INSIDE API");
   } catch (error) {
     console.log(error);
   }
+  return data;
 };
