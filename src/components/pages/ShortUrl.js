@@ -3,20 +3,19 @@ import { Typography, Grid, TextField, IconButton } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import AccordionTable from "../common/AccordionTable";
 import { useState } from "react";
-import { getURLShortener } from "../api/api";
+import { useDispatch, useSelector } from "react-redux";
+import { GET_DATA } from "../../redux/ActionType";
 
 function ShortUrl() {
+  const dispatch = useDispatch();
+  const myData = useSelector((state) => state.Reducer.data);
   const [url, setUrl] = useState("");
-  const [shortUrl, setShortUrl] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const data = await getURLShortener(url);
-      setShortUrl(data.shortURL);
-    } catch (error) {
-      setShortUrl("Error");
-    }
+    dispatch({ type: GET_DATA, payload: url });
   };
+
+  console.log(myData, "INSIDE COMPONENT");
   return (
     <div>
       <Grid container spacing={2} my={4}>
@@ -47,15 +46,9 @@ function ShortUrl() {
       <Grid container my={2}>
         <center>
           <AccordionTable />
-          {shortUrl && (
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ textAlign: "center" }}
-            >
-              {shortUrl}
-            </Typography>
-          )}
+          <Typography variant="h6" component="div" sx={{ textAlign: "center" }}>
+            {myData.shortURL}
+          </Typography>
         </center>
       </Grid>
     </div>
